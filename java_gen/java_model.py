@@ -538,7 +538,8 @@ class JavaOFInterface(object):
             for of_member in of_class.members:
                 if isinstance(of_member, OFLengthMember) or \
                    isinstance(of_member, OFFieldLengthMember) or \
-                   isinstance(of_member, OFPadMember):
+                   isinstance(of_member, OFPadMember) or \
+		   isinstance(of_member, OFVarPadMember):
                     continue
                 java_member = JavaMember.for_of_member(self, of_member)
                 if of_member.name not in member_map:
@@ -838,6 +839,10 @@ class JavaMember(object):
     def is_pad(self):
         return isinstance(self.member, OFPadMember)
 
+    @property
+    def is_varpad(self):
+        return isinstance(self.member, OFVarPadMember)
+
     def is_type_value(self, version=None):
         if(version==None):
             return any(self.is_type_value(version) for version in self.msg.all_versions)
@@ -860,7 +865,7 @@ class JavaMember(object):
 
     @property
     def is_public(self):
-        return not (self.is_pad or self.is_length_value)
+        return not (self.is_pad or self.is_varpad or self.is_length_value)
 
     @property
     def is_data(self):
@@ -902,7 +907,9 @@ class JavaMember(object):
     def length(self):
         if hasattr(self.member, "length"):
             return self.member.length
-        else:
+        elif not self.member.is_fixed_length:
+	    return self.member.pad_length
+	else:
             count, base = loxi_utils.type_dec_to_count_base(self.member.type)
             return of_g.of_base_types[base]['bytes'] * count
 
@@ -910,6 +917,8 @@ class JavaMember(object):
     def for_of_member(java_class, member):
         if isinstance(member, OFPadMember):
             return JavaMember(None, "", None, member)
+	elif isinstance(member, OFVarPadMember):
+	    return JavaMember(None, "", None, member)
         else:
             if member.name == 'len':
                 name = 'length'

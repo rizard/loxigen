@@ -32,6 +32,8 @@
 :: for m in ofclass.members:
 ::     if type(m) == OFPadMember:
         reader.skip(${m.length})
+::     elif type(m) == OFVarPadMember:
+	reader.skip( (length + ( ${m.pad_length} - 1 ) ) / ${m.pad_length} * ${m.pad_length} - length)
 ::     elif type(m) == OFLengthMember:
         _${m.name} = ${gen_unpack_expr(m.oftype, 'reader', version=version)}
         orig_reader = reader

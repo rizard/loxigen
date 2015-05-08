@@ -201,6 +201,8 @@ def build_ordered_classes():
             for m in ofclass.members:
                 if type(m) == OFPadMember:
                     continue
+		elif type(m) == OFVarPadMember:
+		    continue
                 else:
                     if m.oftype.find("list(") == 0:
                         (list_name, base_type) = loxi_utils.list_name_extract(m.oftype)
@@ -267,6 +269,8 @@ def analyze_input():
             for m in ofclass.members:
                 if isinstance(m, OFPadMember):
                     continue
+		if isinstance(m, OFVarPadMember):
+		    continue
                 if m.offset == None:
                     old = of_g.special_offsets.get((ofclass.name, m.name))
                     if old and old != prev_member.name:

@@ -38,6 +38,7 @@ __all__ = [
     'OFLengthMember',
     'OFFieldLengthMember',
     'OFPadMember',
+    'OFVarPadMember',
     'OFVersionMember',
     'OFEnum',
     'OFEnumEntry'
@@ -127,6 +128,15 @@ Zero-filled padding
 Example: packet_in.pad
 """
 OFPadMember = namedtuple('OFPadMember', ['length'])
+
+"""
+Zero-filled padding in variable byte-aligned chunks
+
+@param length Length in bytes to align
+
+Example: packet_in.varpad
+"""
+OFVarPadMember = namedtuple('OFVarPadMember', ['length'])
 
 """
 Field with the version of an OpenFlow object

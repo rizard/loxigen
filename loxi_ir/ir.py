@@ -49,6 +49,7 @@ __all__ = [
     'OFDiscriminatorMember',
     'OFLengthMember',
     'OFFieldLengthMember',
+    'OFVarPadMember',
     'OFPadMember',
     'OFEnum',
     'OFEnumEntry'
@@ -297,6 +298,16 @@ Zero-filled padding
 Example: packet_in.pad
 """
 class OFPadMember (namedtuple('OFPadMember', ['pad_length', 'is_fixed_length', 'base_length', 'offset']), MemberMixin):
+    pass
+
+"""
+Zero-filled padding to the byte-alignment indicated in base_length
+
+@param length Length in bytes to align to e.g. 8 --> 8, 16, 24; 2 --> 2, 4, 6
+
+Example: packet_in.varpad
+"""
+class OFVarPadMember (namedtuple('OFVarPadMember', ['pad_length', 'is_fixed_length', 'base_length', 'offset']), MemberMixin):
     pass
 
 """

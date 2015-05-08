@@ -46,6 +46,8 @@ def get_type(t_ast, ctx):
 def create_member(m_ast, ctx):
     if m_ast[0] == 'pad':
         return ir.OFPadMember(length=m_ast[1])
+    elif m_ast[0] == 'varpad':
+        return ir.OFVarPadMember(length=m_ast[1])
     elif m_ast[0] == 'type':
         return ir.OFTypeMember(name=m_ast[2], oftype=get_type(m_ast[1], ctx), value=m_ast[3])
     elif m_ast[0] == 'data':

@@ -214,6 +214,11 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
 //:: elif prop.is_pad:
             // pad: ${prop.length} bytes
             bb.skipBytes(${prop.length});
+//:: elif prop.is_varpad:
+            // varpad to byte-alignment of: ${prop.length} bytes
+	    if(4 + length - (bb.readerIndex() - start) > ${prop.length})
+		throw new OFParseError("Invalid variable pad to byte-align to ${prop.length} bytes, got="+(length-(bb.readerIndex()-start)));
+            bb.skipBytes(8 - length % ${prop.length} == ${prop.length} ? 0 : 8 - length % ${prop.length});
 //:: elif prop.is_length_value:
             ${prop.java_type.public_type} ${prop.name} = ${prop.java_type.read_op(version, pub_type=True)};
             //:: if prop.is_fixed_value:
@@ -293,6 +298,8 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
             ${prop.java_type.funnel_op(version, "message." + prop.name, pub_type=True)};
 //:: elif prop.is_pad:
             // skip pad (${prop.length} bytes)
+//:: elif prop.is_varpad:
+            // skip varpad (${prop.length} bytes)
 //:: elif prop.is_fixed_value:
             // fixed value property ${prop.name} = ${prop.value}
             ${prop.java_type.funnel_op(version, prop.priv_value, pub_type=False)};
@@ -327,6 +334,12 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
 //:: elif prop.is_pad:
             // pad: ${prop.length} bytes
             bb.writeZero(${prop.length});
+//:: elif prop.is_varpad:
+            // varpad to byte-align to: ${prop.length} bytes
+            bb.writeZero((bb.writerIndex() - startIndex + 4) % ${prop.length} == 0 
+		? 0 
+		: ${prop.length} - (bb.writerIndex() - startIndex) % ${prop.length}
+	    );
 //:: elif prop.is_fixed_value:
             // fixed value property ${prop.name} = ${prop.value}
             ${prop.java_type.write_op(version, prop.priv_value, pub_type=False)};

@@ -146,7 +146,10 @@ def calc_lengths(version, fe_class, existing_classes, existing_enums):
         if isinstance(member, fe.OFPadMember):
             member_base_length = member.length
             member_fixed_length = True
-        else:
+        elif isinstance(member, fe.OFVarPadMember):
+	    member_base_length = member.length
+	    member_fixed_length = False
+	else:
             m_type = member.oftype
             name = member.name
 
@@ -166,8 +169,10 @@ def calc_lengths(version, fe_class, existing_classes, existing_enums):
 
         member_infos[member] = LengthInfo(member_offset, member_base_length,
                 member_fixed_length)
-        offset += member_base_length
 
+	if member_fixed_length:
+            offset += member_base_length
+	
     base_length = offset
     fixed_length = offset_fixed if not fe_class.virtual else False
     return (base_length, fixed_length, member_infos)
