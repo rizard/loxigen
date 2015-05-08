@@ -216,9 +216,7 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
             bb.skipBytes(${prop.length});
 //:: elif prop.is_varpad:
             // varpad to byte-alignment of: ${prop.length} bytes
-	    if(4 + length - (bb.readerIndex() - start) > ${prop.length})
-		throw new OFParseError("Invalid variable pad to byte-align to ${prop.length} bytes, got="+(length-(bb.readerIndex()-start)));
-            bb.skipBytes(8 - length % ${prop.length} == ${prop.length} ? 0 : 8 - length % ${prop.length});
+            bb.skipBytes(${prop.length} - length % ${prop.length} == ${prop.length} ? 0 : ${prop.length} - length % ${prop.length});
 //:: elif prop.is_length_value:
             ${prop.java_type.public_type} ${prop.name} = ${prop.java_type.read_op(version, pub_type=True)};
             //:: if prop.is_fixed_value:
@@ -336,7 +334,7 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
             bb.writeZero(${prop.length});
 //:: elif prop.is_varpad:
             // varpad to byte-align to: ${prop.length} bytes
-            bb.writeZero((bb.writerIndex() - startIndex + 4) % ${prop.length} == 0 
+            bb.writeZero(${prop.length} - (bb.writerIndex() - startIndex) % ${prop.length} == 0 
 		? 0 
 		: ${prop.length} - (bb.writerIndex() - startIndex) % ${prop.length}
 	    );
