@@ -108,6 +108,8 @@ def create_fields():
             for m in ofclass.members:
                 if isinstance(m, OFPadMember):
                     continue
+		elif isinstance(m, OFVarPadMember):
+		    continue
                 fullname = make_field_name(version, ofclass.name, m.name)
                 field_type, field_base, enum_table = get_field_info(version, ofclass.name, m.name, m.oftype)
                 r.append(DissectorField(fullname, m.name, field_type, field_base, enum_table))

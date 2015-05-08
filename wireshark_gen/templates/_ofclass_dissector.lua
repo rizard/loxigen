@@ -53,6 +53,10 @@ function ${name}(reader, subtree)
     reader.skip(${m.length})
 :: continue
 :: #endif
+:: if isinstance(m, OFVarPadMember):
+    reader.skip((_length + ${m.pad_length} - 1) / ${m.pad_length} * ${m.pad_length} - _length) 
+:: continue
+:: #endif
 :: if isinstance(m, OFFieldLengthMember):
     local _${m.field_name}_length = reader.peek(0, ${m.base_length}):uint()
 :: field_length_members.append(m.field_name)
