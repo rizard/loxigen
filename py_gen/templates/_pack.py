@@ -45,7 +45,7 @@
 ::     elif type(m) == OFPadMember:
         packed.append('\x00' * ${m.length})
 ::     elif type(m) == OFVarPadMember:
-	packed.append( (length + ( ${m.pad_length} - 1 ) ) / ${m.pad_length} * ${m.pad_length} - _length)
+	packed.append( (length + ( ${m.pad_length} - 1 ) ) / ${m.pad_length} * ${m.pad_length} - length)
 ::     else:
         packed.append(${gen_pack_expr(m.oftype, 'self.' + m.name, version=version)})
 ::         if m.name in field_length_members:
