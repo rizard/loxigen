@@ -321,6 +321,7 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
             int startIndex = bb.writerIndex();
 //:: #endif
 //:: fields_with_length_member = {}
+//:: var_pad_member = None
 //:: for prop in msg.members:
 //:: if prop.c_name in fields_with_length_member:
             int ${prop.name}StartIndex = bb.writerIndex();
@@ -333,11 +334,7 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
             // pad: ${prop.length} bytes
             bb.writeZero(${prop.length});
 //:: elif prop.is_varpad:
-            // varpad to byte-align to: ${prop.length} bytes
-            bb.writeZero(${prop.length} - (bb.writerIndex() - startIndex) % ${prop.length} == 0 
-		? 0 
-		: ${prop.length} - (bb.writerIndex() - startIndex) % ${prop.length}
-	    );
+//::        var_pad_member = prop
 //:: elif prop.is_fixed_value:
             // fixed value property ${prop.name} = ${prop.value}
             ${prop.java_type.write_op(version, prop.priv_value, pub_type=False)};
@@ -360,6 +357,7 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
 //:: if prop.c_name in fields_with_length_member:
 //::     length_member_name = fields_with_length_member[prop.c_name]
             // update field length member ${length_member_name}
+            // ${var_pad_member}
             int ${prop.name}Length = bb.writerIndex() - ${prop.name}StartIndex;
             bb.setShort(${length_member_name}Index, ${prop.name}Length);
 //:: #endif
@@ -376,6 +374,13 @@ class ${impl_class} implements ${msg.interface.inherited_declaration()} {
             // align message to ${msg.align} bytes
             bb.writeZero(alignedLength - length);
             //:: #endif
+	    //:: if var_pad_member != None:
+	    // varpad to byte-align to: ${var_pad_member.length} bytes
+            bb.writeZero(${var_pad_member.length} - length % ${var_pad_member.length} == 0 
+		? 0 
+		: ${var_pad_member.length} - length % ${var_pad_member.length}
+	    );
+	    //:: #endif
 //:: #end
 
         }

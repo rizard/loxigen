@@ -30,6 +30,7 @@
 :: from py_gen.oftype import gen_pack_expr
 :: length_member = None
 :: length_member_index = None
+:: var_pad_member = None
 :: field_length_members = {}
 :: field_length_indexes = {}
 :: index = 0
@@ -45,7 +46,7 @@
 ::     elif type(m) == OFPadMember:
         packed.append('\x00' * ${m.length})
 ::     elif type(m) == OFVarPadMember:
-	packed.append( (length + ( ${m.pad_length} - 1 ) ) / ${m.pad_length} * ${m.pad_length} - length)
+::	   var_pad_member = m
 ::     else:
         packed.append(${gen_pack_expr(m.oftype, 'self.' + m.name, version=version)})
 ::         if m.name in field_length_members:
@@ -56,7 +57,10 @@
 ::     #endif
 ::     index += 1
 :: #endfor
-:: if length_member_index != None:
+:: if length_member_index != None and var_pad_member != None:
+        length = sum([len(x) for x in packed]) # include the byte-aligned pad to ${var_pad_member.pad_length} after length calc
+	packed.append( '\x00' * ((length + ( ${var_pad_member.pad_length} - 1 ) ) / ${var_pad_member.pad_length} * ${var_pad_member.pad_length} - length))
+:: elif length_member_index != None:
         length = sum([len(x) for x in packed])
 :: if ofclass.has_internal_alignment:
         packed.append(loxi.generic_util.pad_to(8, length))
