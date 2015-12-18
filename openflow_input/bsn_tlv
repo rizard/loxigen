@@ -500,3 +500,158 @@ struct of_bsn_tlv_strip_mpls_l3_on_ingress : of_bsn_tlv {
     uint16_t type == 76;
     uint16_t length;
 };
+
+struct of_bsn_tlv_vlan_vid_mask : of_bsn_tlv {
+    uint16_t type == 77;
+    uint16_t length;
+    uint16_t value;
+};
+
+struct of_bsn_tlv_igmp_snooping : of_bsn_tlv {
+    uint16_t type == 78;
+    uint16_t length;
+};
+
+struct of_bsn_tlv_l2_multicast_lookup : of_bsn_tlv {
+    uint16_t type == 79;
+    uint16_t length;
+};
+
+struct of_bsn_tlv_generation_id : of_bsn_tlv {
+    uint16_t type == 80;
+    uint16_t length;
+    uint64_t value;
+};
+
+enum ofp_bsn_anchor(wire_type=uint16_t) {
+    OFP_BSN_ANCHOR_PACKET_START = 0,
+    OFP_BSN_ANCHOR_L3_HEADER_START = 1,
+    OFP_BSN_ANCHOR_L4_HEADER_START = 2,
+    OFP_BSN_ANCHOR_L4_PAYLOAD_START = 3,
+};
+
+struct of_bsn_tlv_anchor : of_bsn_tlv {
+    uint16_t type == 81;
+    uint16_t length;
+    enum ofp_bsn_anchor value;
+};
+
+struct of_bsn_tlv_offset : of_bsn_tlv {
+    uint16_t type == 82;
+    uint16_t length;
+    uint16_t value;
+};
+
+struct of_bsn_tlv_negate : of_bsn_tlv {
+    uint16_t type == 83;
+    uint16_t length;
+};
+
+struct of_bsn_tlv_ipv6 : of_bsn_tlv {
+    uint16_t type == 84;
+    uint16_t length;
+    of_ipv6_t value;
+};
+
+enum ofp_bsn_decap(wire_type=uint16_t) {
+    OFP_BSN_DECAP_VXLAN = 0,
+    OFP_BSN_DECAP_ERSPAN = 1,
+    OFP_BSN_DECAP_L2_GRE = 2,
+    OFP_BSN_DECAP_NVGRE = 3,
+    OFP_BSN_DECAP_CAPWAP = 4,
+    OFP_BSN_DECAP_L2_MPLS = 5,
+    OFP_BSN_DECAP_L3_GRE = 6,
+    OFP_BSN_DECAP_GTP = 7,
+    OFP_BSN_DECAP_L3_MPLS = 8,
+};
+
+struct of_bsn_tlv_decap : of_bsn_tlv {
+    uint16_t type == 85;
+    uint16_t length;
+    enum ofp_bsn_decap value;
+};
+
+struct of_bsn_tlv_vni : of_bsn_tlv {
+    uint16_t type == 86;
+    uint16_t length;
+    uint32_t value;
+};
+
+struct of_bsn_tlv_mcg_type_vxlan : of_bsn_tlv {
+    uint16_t type == 87;
+    uint16_t length;
+};
+
+enum ofp_bsn_port_vxlan_mode(wire_type=uint8_t) {
+    OFP_BSN_PORT_VXLAN_RECIRCULATION_ENABLE = 0,
+    OFP_BSN_PORT_VXLAN_TERMINATION_ENABLE = 1,
+};
+
+struct of_bsn_tlv_port_vxlan_mode : of_bsn_tlv {
+    uint16_t type == 88;
+    uint16_t length;
+    enum ofp_bsn_port_vxlan_mode value;
+};
+
+enum ofp_bsn_rate_unit(wire_type=uint8_t) {
+    OFP_BSN_RATE_UNIT_PPS = 0, /* Packets per second */
+    OFP_BSN_RATE_UNIT_KBITPS = 1, /* Kilobits per second */
+};
+
+struct of_bsn_tlv_rate_unit : of_bsn_tlv {
+    uint16_t type == 89;
+    uint16_t length;
+    enum ofp_bsn_rate_unit value;
+};
+
+struct of_bsn_tlv_broadcast_rate : of_bsn_tlv {
+    uint16_t type == 90;
+    uint16_t length;
+    uint32_t value;
+};
+
+struct of_bsn_tlv_known_multicast_rate : of_bsn_tlv {
+    uint16_t type == 91;
+    uint16_t length;
+    uint32_t value;
+};
+
+struct of_bsn_tlv_unknown_multicast_rate : of_bsn_tlv {
+    uint16_t type == 92;
+    uint16_t length;
+    uint32_t value;
+};
+
+struct of_bsn_tlv_unicast_rate : of_bsn_tlv {
+    uint16_t type == 93;
+    uint16_t length;
+    uint32_t value;
+};
+
+struct of_bsn_tlv_nexthop_type_vxlan : of_bsn_tlv {
+    uint16_t type == 94;
+    uint16_t length;
+};
+
+struct of_bsn_tlv_multicast_interface_id : of_bsn_tlv {
+    uint16_t type == 95;
+    uint16_t length;
+    uint32_t value;
+};
+
+struct of_bsn_tlv_use_packet_state : of_bsn_tlv {
+    uint16_t type == 96;
+    uint16_t length;
+    uint8_t value;
+};
+
+enum ofp_bsn_status(wire_type=uint8_t) {
+    OFP_BSN_STATUS_DISABLE = 0,
+    OFP_BSN_STATUS_ENABLE = 1,
+};
+
+struct of_bsn_tlv_status: of_bsn_tlv {
+    uint16_t type == 97;
+    uint16_t length;
+    enum ofp_bsn_status value;
+};
