@@ -31,6 +31,7 @@ import org.projectfloodlight.openflow.types.VRF;
 import org.projectfloodlight.openflow.types.VlanPcp;
 import org.projectfloodlight.openflow.types.VxlanNI;
 import org.projectfloodlight.openflow.types.VFI;
+import org.projectfloodlight.openflow.types.Bytes;
 
 import java.util.Set;
 import com.google.common.collect.ImmutableSet;
@@ -295,6 +296,9 @@ public class MatchField<F extends OFValueType<F>> {
 
     public final static MatchField<VFI> BSN_VFI =
             new MatchField<VFI>("bsn_vfi", MatchFields.BSN_VFI);
+
+    public final static MatchField<Bytes> BSN_REGEX =
+            new MatchField<Bytes>("bsn_regex", MatchFields.BSN_REGEX);
 
     public String getName() {
         return name;
