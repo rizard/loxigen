@@ -24,3 +24,4 @@
      *
      * @return the hashcode of the message, ignoring the XID
      */
+    int hashCodeIgnoreXid();
